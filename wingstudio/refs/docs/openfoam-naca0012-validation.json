@@ -1,0 +1,95 @@
+{
+  "id": "openfoam-naca0012-validation",
+  "title": "OpenFOAM documentation: Turbulent flow over NACA0012 airfoil (2D)",
+  "source_url": "https://doc.openfoam.com/2606/examples/verification-validation/turbulent/naca0012/",
+  "retrieved": "2026-11-18",
+  "licence": "\"Copyright © OpenCFD Ltd. Documentation licence: CC BY-NC-ND 4.0.\" (footer of the page)",
+  "scope": "excerpts",
+  "raw_file": "page.html",
+  "passages": [
+    {
+      "key": "turbulence-model",
+      "heading": "Physics and Numerics",
+      "text": "Turbulence model: Spalart Allmaras",
+      "settings": [
+        "physics.turbulence_model"
+      ],
+      "why": "OpenFOAM's own airfoil validation case uses the Spalart-Allmaras model, the studio's default."
+    },
+    {
+      "key": "nutilda-freestream",
+      "heading": "Physics and Numerics",
+      "text": "3.432e^{-5} \\approx 4 \\nu_\\text{fluid}",
+      "settings": [
+        "physics.nut_ratio"
+      ],
+      "why": "The free-stream nuTilda of the validation case is about 4 times the molecular viscosity, the ratio the studio uses by default."
+    },
+    {
+      "key": "domain-size",
+      "heading": "Physics and Numerics",
+      "text": "(x, y, z) \\approx (985.5, 1.0, 1015.6)",
+      "settings": [
+        "mesh.farfield_chords"
+      ],
+      "why": "The domain is about 1000 chords across for a 1 m chord, far larger than the studio's 30-chord far field."
+    },
+    {
+      "key": "first-cell",
+      "heading": "Physics and Numerics",
+      "text": "First wall-normal cell centre height: $\\Delta_y^+ < 1$",
+      "settings": [
+        "physics.wall_treatment",
+        "mesh.first_cell_height"
+      ],
+      "why": "The validation mesh resolves the wall, with the first cell centre at y+ below 1, instead of using wall functions as the studio's default does."
+    },
+    {
+      "key": "convection-entry",
+      "heading": "Physics and Numerics",
+      "text": "div(phi,nuTilda): bounded Gauss linearUpwind grad(nuTilda)",
+      "settings": [
+        "numerics.convection_scheme"
+      ],
+      "why": "OpenFOAM's own airfoil validation writes convection as bounded Gauss linearUpwind, the entry the studio writes; the turbulence line is quoted because the source page splits the momentum line just above it in two (the viewer draws it back on one line)."
+    },
+    {
+      "key": "farfield-velocity-condition",
+      "heading": "Physics and Numerics",
+      "text": "freestreamVelocity",
+      "settings": [
+        "physics.farfield_bc"
+      ],
+      "why": "The velocity table gives freestreamVelocity for the inlet and for the outlet of the validation case; the studio's default fixes the velocity on the inlet instead."
+    },
+    {
+      "key": "farfield-pressure-condition",
+      "heading": "Physics and Numerics",
+      "text": "freestreamPressure",
+      "settings": [
+        "physics.farfield_bc"
+      ],
+      "why": "The pressure table gives freestreamPressure for the inlet and for the outlet; the studio's default fixes the pressure on the outlet only."
+    }
+  ],
+  "context": [
+    {
+      "key": "based-on-nasa-case",
+      "heading": "Overview",
+      "text": "Based on https://turbmodels.larc.nasa.gov/naca0012_val.html",
+      "why": "OpenFOAM's case reproduces NASA's 2D NACA 0012 validation case, the one in the catalogue as nasa-tmr-naca0012."
+    },
+    {
+      "key": "reynolds-number",
+      "heading": "Physics and Numerics",
+      "text": "\\text{Re}_c = U_x \\, c \\, \\nu^{-1} \\approx 6\\times10^6",
+      "why": "The validation is run at a chord Reynolds number of about 6 million, fully turbulent flow of the kind the studio models."
+    },
+    {
+      "key": "c-grid",
+      "heading": "Physics and Numerics",
+      "text": "Shape: extruded C-grid",
+      "why": "The validation mesh is a C-grid one cell thick, the same topology as the studio's mesh."
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "id": "nasa-tmr-spalart-allmaras",
+  "title": "The Spalart-Allmaras Turbulence Model (Turbulence Modeling Resource)",
+  "source_url": "https://tmbwg.github.io/turbmodels/spalart.html",
+  "retrieved": "2026-11-18",
+  "licence": "not stated on the page",
+  "scope": "excerpts",
+  "raw_file": "spalart.html",
+  "passages": [
+    {
+      "key": "no-trip-term-new-farfield-value",
+      "heading": "\"Standard\" Spalart-Allmaras One-Equation Model (SA)",
+      "text": "The original reference made use of a trip term that most people do not include, because the model is most often employed for fully turbulent applications. Therefore, in this \"standard\" representation the trip term is being left out (see version (SA-Ia) below for the version including the trip term). As a consequence, the farfield boundary condition must be changed from that given in the above reference.",
+      "settings": [
+        "physics.nut_ratio"
+      ],
+      "why": "A fully turbulent run without the trip term, which is what the studio does, needs a far-field value different from the one in the 1992 paper."
+    },
+    {
+      "key": "wall-and-farfield-values",
+      "heading": "\"Standard\" Spalart-Allmaras One-Equation Model (SA)",
+      "text": "The boundary conditions are:\n\n$$\\tilde \\nu_{wall} = 0$$\n$$\\tilde \\nu_{farfield} = 3 \\nu_{\\infty} : to : 5 \\nu_{\\infty}$$",
+      "settings": [
+        "physics.nut_ratio"
+      ],
+      "why": "The Spalart-Allmaras variable is set to zero on walls and to 3 to 5 times the molecular viscosity in the far field; the studio's ratio of 4 is inside that range."
+    },
+    {
+      "key": "equivalent-eddy-viscosity",
+      "heading": "\"Standard\" Spalart-Allmaras One-Equation Model (SA)",
+      "text": "Note that these boundary conditions on the SA turbulence field variable correspond to turbulent kinematic viscosity values of:\n\n$$\\nu_{t,wall} = 0$$\n$$\\nu_{t,farfield} = 0.210438 \\nu_{\\infty} : to : 1.294234 \\nu_{\\infty}$$",
+      "settings": [
+        "physics.nut_ratio"
+      ],
+      "why": "The ratio of 3 to 5 is for the model's working variable (nuTilda); the eddy viscosity it produces in the free stream is smaller, 0.21 to 1.29 times the molecular viscosity."
+    }
+  ]
+}

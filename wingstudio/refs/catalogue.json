@@ -1,0 +1,414 @@
+{
+ "version": 1,
+ "checked": "2026-11-18",
+ "entries": [
+  {
+   "id": "spalart-allmaras-1992",
+   "title": "A One-Equation Turbulence Model for Aerodynamic Flows",
+   "kind": "paper",
+   "source": "Spalart, P. R. and Allmaras, S. R., 1992, AIAA Paper 92-0439, 30th Aerospace Sciences Meeting and Exhibit",
+   "locator": "The paper as a whole: it defines and calibrates the model. No page recorded.",
+   "says": "Introduces the one-equation eddy-viscosity model, built and calibrated for attached aerodynamic flows such as airfoils and wings. It is the studio's default turbulence model and the one behind its reference run.",
+   "settings": ["physics.turbulence_model"],
+   "url": "https://doi.org/10.2514/6.1992-439",
+   "url_verified": true,
+   "checked": "2026-11-18"
+  },
+  {
+   "id": "menter-1994",
+   "title": "Two-Equation Eddy-Viscosity Turbulence Models for Engineering Applications",
+   "kind": "paper",
+   "source": "Menter, F. R., 1994, AIAA Journal 32(8), 1598-1605",
+   "locator": "The paper as a whole: it defines the SST model. No page recorded.",
+   "says": "Defines the k-omega SST model: k-omega near the wall, k-epsilon behaviour outside, and a limit on the shear stress that improves flows under adverse pressure gradients. It is the source to cite when a plan uses kOmegaSST.",
+   "settings": ["physics.turbulence_model"],
+   "url": "https://doi.org/10.2514/3.12149",
+   "url_verified": true,
+   "checked": "2026-11-18"
+  },
+  {
+   "id": "nasa-tmr-spalart-allmaras",
+   "title": "The Spalart-Allmaras Turbulence Model (Turbulence Modeling Resource)",
+   "kind": "documentation",
+   "source": "NASA Langley Turbulence Modeling Resource, page 'Spalart-Allmaras Model', served at tmbwg.github.io",
+   "locator": "Standard model (SA), the paragraph 'The boundary conditions are': wall value 0, far-field value 3 to 5 times the molecular viscosity",
+   "says": "For a fully turbulent run without the trip term, the far-field value of the Spalart-Allmaras variable is set to 3 to 5 times the molecular viscosity, and to zero on walls. The studio's free-stream ratio of 4 sits inside that range.",
+   "settings": ["physics.nut_ratio"],
+   "differs": [
+    {"settings": ["physics.nut_ratio"],
+     "text": "The studio names this setting nut_ratio, but with Spalart-Allmaras its 4 is the model variable nuTilda over the molecular viscosity, the quantity this page gives as 3 to 5. The eddy viscosity that results is smaller: the page gives 0.21 to 1.29 times the molecular viscosity."}
+   ],
+   "url": "https://tmbwg.github.io/turbmodels/spalart.html",
+   "url_verified": true,
+   "checked": "2026-11-18"
+  },
+  {
+   "id": "nasa-tmr-sst",
+   "title": "The Menter Shear Stress Transport Turbulence Model (Turbulence Modeling Resource)",
+   "kind": "documentation",
+   "source": "NASA Langley Turbulence Modeling Resource, page 'Menter Shear Stress Transport Model', served at tmbwg.github.io",
+   "locator": "Standard model (SST), 'The boundary conditions recommended in the original reference' and the note after it on the free-stream eddy viscosity and its decay",
+   "says": "Gives the far-field k and omega ranges of the SST model, which together should give a free-stream eddy viscosity of 1e-5 to 1e-2 times the molecular one, and notes that these values decay on the way to the body. The studio's SST guidance (ratio 1, intensity 0.1%) is above that range and is not taken from this page.",
+   "settings": ["physics.turbulence_intensity", "physics.nut_ratio"],
+   "differs": [
+    {"settings": ["physics.nut_ratio"],
+     "text": "The page asks for a free-stream eddy viscosity of 1e-5 to 1e-2 times the molecular one. The studio's guidance for kOmegaSST is a ratio of 1, about a hundred times the top of that range, and is not taken from this page."},
+    {"settings": ["physics.turbulence_intensity"],
+     "text": "The page's far-field k range for the standard model works out to an intensity of at most about 0.018% at Re 2e6 with the chord as the length, and the page says the far-field values decay before the body. The studio sets 0.1%, close to the 0.08165% the page gives for the controlled-decay variant, which the studio does not use."}
+   ],
+   "url": "https://tmbwg.github.io/turbmodels/sst.html",
+   "url_verified": true,
+   "checked": "2026-11-18"
+  },
+  {
+   "id": "nasa-tmr-naca0012",
+   "title": "2D NACA 0012 Airfoil Validation Case (Turbulence Modeling Resource)",
+   "kind": "documentation",
+   "source": "NASA Langley Turbulence Modeling Resource, case 2DN00 and four pages linked from it: 'Effect of Farfield Boundary' (naca0012_val_ffeffect.html), the grids page and the SA and SSTm results pages, served at tmbwg.github.io",
+   "locator": "Opening description of the case (far field almost 500 chords away, point-vortex correction otherwise) and the linked page 'Effect of Farfield Boundary' (500 chords against 30); for the grid sizes and the free-stream turbulence values, the grids page and the two results pages",
+   "says": "NASA's airfoil validation case puts the far field almost 500 chords away and asks for a point-vortex correction when it is closer. Its far-field study, made at 15 degrees, finds that at 30 chords the boundary changes the forces more, drag most of all. The linked pages give the grid family and the free-stream turbulence values NASA's codes used.",
+   "settings": ["mesh.farfield_chords", "physics.farfield_bc", "mesh.n_leading", "mesh.n_aft", "mesh.n_wake", "physics.nut_ratio", "physics.turbulence_intensity"],
+   "differs": [
+    {"settings": ["mesh.farfield_chords", "physics.farfield_bc"],
+     "text": "NASA puts the far field almost 500 chords away, or asks for a point-vortex correction when it is closer; its own study finds that at 30 chords without that correction the boundary changes the forces more, drag most of all. The studio uses 30 chords with no correction, and its fixed-velocity inlet with a fixed-pressure outlet is not a condition this page describes."},
+    {"settings": ["physics.nut_ratio", "physics.turbulence_intensity"],
+     "text": "NASA's CFL3D and FUN3D runs of this case used a free-stream value of 3 for Spalart-Allmaras, and an intensity of 0.052% with an eddy-viscosity ratio of 0.009 for SST. The studio uses 4 for Spalart-Allmaras, and 0.1% with a ratio of 1 as its kOmegaSST guidance."}
+   ],
+   "url": "https://tmbwg.github.io/turbmodels/naca0012_val.html",
+   "url_verified": true,
+   "checked": "2026-11-18"
+  },
+  {
+   "id": "thomas-salas-1986",
+   "title": "Far-Field Boundary Conditions for Transonic Lifting Solutions to the Euler Equations",
+   "kind": "paper",
+   "source": "Thomas, J. L. and Salas, M. D., 1986, AIAA Journal 24(7), 1074-1080",
+   "locator": "The far-field point-vortex correction. No page recorded.",
+   "says": "The paper NASA's validation pages name for the far-field point-vortex correction: from far away a lifting airfoil acts like a vortex, so uniform flow imposed on a nearby boundary biases the forces. The studio applies no such correction and reports the drag this costs, about Cl^2 / (4 pi R).",
+   "settings": ["mesh.farfield_chords", "physics.farfield_bc"],
+   "url": "https://doi.org/10.2514/3.9394",
+   "url_verified": true,
+   "checked": "2026-11-18"
+  },
+  {
+   "id": "spalding-1961",
+   "title": "A Single Formula for the Law of the Wall",
+   "kind": "paper",
+   "source": "Spalding, D. B., 1961, Journal of Applied Mechanics 28(3), 455-458",
+   "locator": "The formula of the title. No page recorded.",
+   "says": "Gives one continuous formula for the mean velocity from the wall through the viscous and buffer layers into the logarithmic region. OpenFOAM's nutUSpaldingWallFunction, the wall function the studio writes, is built on it.",
+   "settings": ["physics.wall_treatment", "mesh.first_cell_height"],
+   "url": "https://doi.org/10.1115/1.3641728",
+   "url_verified": true,
+   "checked": "2026-11-18"
+  },
+  {
+   "id": "white-fluid-mechanics",
+   "title": "Fluid Mechanics",
+   "kind": "book",
+   "source": "White, F. M., Fluid Mechanics, McGraw-Hill; chapter on flow past immersed bodies (turbulent flat plate). Edition and page not checked against the book.",
+   "locator": "Chapter on flow past immersed bodies, turbulent flat-plate skin friction. Edition, equation number and page not checked against the book.",
+   "says": "Textbook source of the one-seventh-power estimate of turbulent flat-plate skin friction, cf about 0.027 / Re_x^(1/7). The studio's estimate_first_cell uses the same law with a coefficient of 0.026 to turn a target y+ into a first-cell height.",
+   "settings": ["mesh.first_cell_height"],
+   "url": "",
+   "url_verified": false,
+   "checked": ""
+  },
+  {
+   "id": "drela-1989-xfoil",
+   "title": "XFOIL: An Analysis and Design System for Low Reynolds Number Airfoils",
+   "kind": "paper",
+   "source": "Drela, M., 1989, in Low Reynolds Number Aerodynamics, Lecture Notes in Engineering 54, Springer, 1-12",
+   "locator": "The paper as a whole: it describes the formulation of XFoil. No page recorded.",
+   "says": "Describes XFoil: a panel method coupled with an integral boundary-layer formulation and e^N transition prediction for subsonic airfoils. It is the studio's reference solver and the source of each case's angle of attack.",
+   "settings": ["case.alpha_deg", "validate.transition", "validate.mach"],
+   "url": "https://doi.org/10.1007/978-3-642-84010-4_1",
+   "url_verified": true,
+   "checked": "2026-11-18"
+  },
+  {
+   "id": "xfoil-primer",
+   "title": "XFOIL 6.9 User Primer",
+   "kind": "documentation",
+   "source": "Drela, M. and Youngren, H., MIT, last updated 30 Nov 2001 (xfoil_doc.txt)",
+   "locator": "The whole primer is kept locally. The cited passages are in 'General Description' (Inviscid Formulation: the Karman-Tsien correction; Viscous Formulation), 'Program Execution' (Generation of current airfoil: LOAD and PANE), 'Units' (trip locations as x/c), 'Analysis' (Transition criterion: free and forced transition; Force calculation: the correction of Cp; Re, Mach dependence: polar types), 'Start-up Defaults' (line 14, the trip locations) and 'Caveats' (stepping the angle of attack, the iteration limit, Mach above 1)",
+   "says": "The user guide of XFoil: transition can be forced at a trip location on each surface while free transition may still occur ahead of it, and Mach number enters through a Karman-Tsien correction. It also describes how coordinates are loaded and panelled, and how an operating point is reached by stepping the angle of attack and iterating. The studio trips both surfaces at 5% chord and runs the reference at Mach 0.",
+   "settings": ["validate.transition", "validate.mach", "validate.flight_mach", "case.alpha_deg", "geometry.naca"],
+   "differs": [
+    {"settings": ["validate.transition"],
+     "text": "The primer documents XFOIL 6.9 (last updated 2001) while the studio drives XFoil 6.99. It never names XTR, the command the studio uses to set the trip: trips appear in the Units section, in the transition description and in the start-up defaults."},
+    {"settings": ["validate.mach", "validate.flight_mach", "case.alpha_deg", "geometry.naca"],
+     "text": "The primer documents XFOIL 6.9 (last updated 2001). The studio drives XFoil 6.99."}
+   ],
+   "url": "https://web.mit.edu/drela/Public/web/xfoil/xfoil_doc.txt",
+   "url_verified": true,
+   "checked": "2026-11-18"
+  },
+  {
+   "id": "naca-tr-460",
+   "title": "The Characteristics of 78 Related Airfoil Sections from Tests in the Variable-Density Wind Tunnel",
+   "kind": "paper",
+   "source": "Jacobs, E. N., Ward, K. E. and Pinkerton, R. M., 1933, NACA Report 460 (NASA Technical Reports Server, record 19930091108)",
+   "locator": "The report as a whole: the definition of the four-digit family and its test data. No page recorded.",
+   "says": "The original report that defines the NACA four-digit family: a thickness distribution and a mean line set by the camber, camber-position and thickness digits, with wind-tunnel data for 78 sections.",
+   "settings": ["geometry.naca"],
+   "url": "https://ntrs.nasa.gov/citations/19930091108",
+   "url_verified": true,
+   "checked": "2026-11-18"
+  },
+  {
+   "id": "abbott-vondoenhoff-1959",
+   "title": "Theory of Wing Sections: Including a Summary of Airfoil Data",
+   "kind": "book",
+   "source": "Abbott, I. H. and von Doenhoff, A. E., 1959, Dover Publications",
+   "locator": "The chapter on families of wing sections and the appendices of section data. Chapter and page not checked against the book.",
+   "says": "The standard reference for NACA sections: the four-digit thickness form and mean lines, and measured section data against which a computed lift, drag or moment can be judged for plausibility.",
+   "settings": ["geometry.naca"],
+   "url": "",
+   "url_verified": false,
+   "checked": ""
+  },
+  {
+   "id": "ferziger-peric-2020",
+   "title": "Computational Methods for Fluid Dynamics",
+   "kind": "book",
+   "source": "Ferziger, J. H., Peric, M. and Street, R. L., 2020, 4th edition, Springer; chapter on the solution of the Navier-Stokes equations, pressure-correction methods (section number not checked)",
+   "locator": "Chapter on the solution of the Navier-Stokes equations, pressure-correction methods. Section number and wording not checked against the book; only the DOI record was.",
+   "says": "Explains why the SIMPLE pressure-correction method needs under-relaxation of momentum and pressure; the relation usually quoted from it is a pressure factor near one minus the velocity factor. The studio's 0.7 for velocity with 0.3 for pressure fits that relation.",
+   "settings": ["numerics.relax_p", "numerics.relax_U"],
+   "url": "https://doi.org/10.1007/978-3-319-99693-6",
+   "url_verified": true,
+   "checked": "2026-11-18"
+  },
+  {
+   "id": "openfoam-linearupwind",
+   "title": "OpenFOAM documentation: Linear-upwind divergence scheme",
+   "kind": "documentation",
+   "source": "OpenCFD Ltd, OpenFOAM documentation v2606 (the nearest published version; the studio runs v2512), Numerics > Schemes > Divergence",
+   "locator": "The list of properties at the top of the page: second order, unbounded",
+   "says": "Documents linearUpwind as a second-order convection scheme: upwind weights with an explicit correction from the cell gradient. The page lists it as unbounded.",
+   "settings": ["numerics.convection_scheme"],
+   "differs": [
+    {"settings": ["numerics.convection_scheme"],
+     "text": "The page lists linearUpwind as unbounded and its example reads Gauss linearUpwind grad(U). The studio writes bounded Gauss linearUpwind grad(U): bounded there is the steady-state form of the Gauss term, which this page does not show, and it does not make the scheme bounded."}
+   ],
+   "url": "https://doc.openfoam.com/2606/tools/processing/numerics/schemes/divergence/rtm/linearUpwind/",
+   "url_verified": true,
+   "checked": "2026-11-18"
+  },
+  {
+   "id": "openfoam-simple-relaxation",
+   "title": "OpenFOAM documentation: Under relaxation",
+   "kind": "documentation",
+   "source": "OpenCFD Ltd, OpenFOAM documentation v2606, Numerics > Solvers > Under relaxation",
+   "locator": "The parts on field under-relaxation and on equation under-relaxation",
+   "says": "Explains the relaxationFactors of fvSolution: a field factor limits how far a field moves per iteration, and equation relaxation is tied to the diagonal dominance the linear solvers need. It gives no recommended numbers; 0.3 / 0.7 / 0.7 are the values of the studio's reference run.",
+   "settings": ["numerics.relax_p", "numerics.relax_U", "numerics.relax_turbulence"],
+   "differs": [
+    {"settings": ["numerics.relax_p", "numerics.relax_U", "numerics.relax_turbulence"],
+     "text": "The page explains what the factors do and recommends no values. The studio's 0.3 for pressure and 0.7 for velocity and turbulence are the values of its own reference run."}
+   ],
+   "url": "https://doc.openfoam.com/2606/tools/processing/numerics/solvers/under-relaxation/",
+   "url_verified": true,
+   "checked": "2026-11-18"
+  },
+  {
+   "id": "openfoam-simple-algorithm",
+   "title": "OpenFOAM documentation: SIMPLE algorithm",
+   "kind": "documentation",
+   "source": "OpenCFD Ltd, OpenFOAM documentation v2606, Solvers > Pressure-velocity > SIMPLE algorithm",
+   "locator": "The numbered steps of the loop and the heading 'SIMPLEC'",
+   "says": "Lists the steps of the SIMPLE loop as OpenFOAM runs it, with momentum under-relaxed before the velocity solve and pressure after the flux correction. It names SIMPLEC (Van Doormaal and Raithby) without describing it; the page is marked as under construction. The studio keeps plain SIMPLE by default.",
+   "settings": ["numerics.consistent", "numerics.relax_p", "numerics.relax_U"],
+   "differs": [
+    {"settings": ["numerics.consistent"],
+     "text": "The page is a stub marked as under construction: it names SIMPLEC with its authors and describes neither it nor the consistent switch. The studio offers that switch and leaves it off by default, a choice this page does not support either way."},
+    {"settings": ["numerics.relax_p", "numerics.relax_U"],
+     "text": "The page shows where in the loop momentum and pressure are under-relaxed and gives no factors. The studio's 0.7 and 0.3 are not from this page."}
+   ],
+   "url": "https://doc.openfoam.com/2606/tools/processing/solvers/pressure-velocity/simple/",
+   "url_verified": true,
+   "checked": "2026-11-18"
+  },
+  {
+   "id": "openfoam-wall-functions",
+   "title": "OpenFOAM documentation: Wall functions",
+   "kind": "documentation",
+   "source": "OpenCFD Ltd, OpenFOAM documentation v2606, Models > Turbulence > RAS > Wall functions",
+   "locator": "The description of the wall layers and the part 'High and low Reynolds number operation' (y+ 30 to 300 on the first cell centre)",
+   "says": "Wall functions assume the first cell centre lies in the logarithmic layer (the page gives roughly y+ 30 to 300), while resolving the wall needs y+ about 1; a mismatch degrades drag, so y+ should be checked. The studio's accepted band of 20 to 200 is its own and lower at both ends.",
+   "settings": ["mesh.first_cell_height", "physics.wall_treatment"],
+   "differs": [
+    {"settings": ["mesh.first_cell_height"],
+     "text": "The page intends wall functions for a first cell centre at y+ of about 30 to 300 and says that in the buffer layer below it neither estimate is accurate. The studio accepts an average of 20 to 200 and aims at 40; its reference case measured 6 to 74, so part of the surface is below the page's range."},
+    {"settings": ["physics.wall_treatment"],
+     "text": "The page gives y+ of about 30 to 300 for wall functions and about 1 or less for a resolved wall; the studio's gates accept an average of 20 to 200 and up to 5. The studio writes nutUSpaldingWallFunction, which this page does not name, and with kOmegaSST omegaWallFunction with its defaults, where the page recommends binomial blending."}
+   ],
+   "url": "https://doc.openfoam.com/2606/tools/processing/models/turbulence/ras/wall-functions/",
+   "url_verified": true,
+   "checked": "2026-11-18"
+  },
+  {
+   "id": "openfoam-freestream-bc",
+   "title": "OpenFOAM documentation: freestream boundary condition",
+   "kind": "documentation",
+   "source": "OpenCFD Ltd, OpenFOAM documentation v2606, Boundary conditions > inletOutlet > freestream",
+   "locator": "The description at the top of the page",
+   "says": "The freestream condition is a mixed condition derived from inletOutlet: it switches between a fixed free-stream value and zero gradient with the direction of the flux. The studio's fixedInlet choice instead fixes the values on the inlet arc and the pressure on the outlet.",
+   "settings": ["physics.farfield_bc"],
+   "differs": [
+    {"settings": ["physics.farfield_bc"],
+     "text": "The page covers the generic freestream condition only, which the studio writes for the turbulence fields when farfield_bc is freestream. Velocity and pressure then use freestreamVelocity and freestreamPressure, which have their own pages, and the default fixedInlet uses none of the three."}
+   ],
+   "url": "https://doc.openfoam.com/2606/tools/processing/boundary-conditions/rtm/derived/inletOutlet/freestream/",
+   "url_verified": true,
+   "checked": "2026-11-18"
+  },
+  {
+   "id": "openfoam-checkmesh-thresholds",
+   "title": "OpenFOAM v2512 source: primitiveMeshCheck.C (default mesh-check thresholds)",
+   "kind": "documentation",
+   "source": "OpenCFD Ltd, OpenFOAM API guide v2512, primitiveMeshCheck.C, lines 39-42",
+   "locator": "Lines 39 to 42: closedThreshold_, aspectThreshold_ (1000), nonOrthThreshold_ (70 degrees), skewThreshold_ (4)",
+   "says": "The defaults that checkMesh reports against in the version the studio runs: non-orthogonality 70 degrees, skewness 4, aspect ratio 1000. The mesh gate uses the first two as hard limits and does not fail on aspect ratio.",
+   "settings": ["mesh.n_normal", "numerics.n_non_orthogonal_correctors"],
+   "differs": [
+    {"settings": ["mesh.n_normal", "numerics.n_non_orthogonal_correctors"],
+     "text": "In this source a face beyond 70 degrees is only counted and reported as severely non-orthogonal; the check fails only for faces at 90 degrees or more. The studio's mesh gate refuses a mesh at 70 degrees, which is stricter than checkMesh."}
+   ],
+   "url": "https://api.openfoam.com/2512/primitiveMeshCheck_8C_source.html",
+   "url_verified": true,
+   "checked": "2026-11-18"
+  },
+  {
+   "id": "openfoam-naca0012-validation",
+   "title": "OpenFOAM documentation: Turbulent flow over NACA0012 airfoil (2D)",
+   "kind": "documentation",
+   "source": "OpenCFD Ltd, OpenFOAM documentation v2606, Examples > Verification and validation > Turbulent",
+   "locator": "'Overview' (simpleFoam; the case follows NASA's 2D NACA 0012 validation case, entry nasa-tmr-naca0012) and 'Physics and Numerics': the physical modelling (Re about 6e6), the domain and mesh (an extruded C-grid), the divergence schemes and the boundary-condition tables (freestreamVelocity and freestreamPressure on inlet and outlet; nuTilda at the inlet about 4 times the molecular viscosity)",
+   "says": "OpenFOAM's own airfoil validation runs simpleFoam with Spalart-Allmaras at Re about 6e6, with free-stream nuTilda about 4 times the molecular viscosity and bounded Gauss linearUpwind convection, on a domain about 1000 chords across. Solver, model and convection entry are those of the studio's default; the wall is resolved and the far field uses freestream conditions, which the studio's defaults do not. The page shows plots and no force numbers.",
+   "settings": ["physics.turbulence_model", "physics.nut_ratio", "physics.wall_treatment", "physics.farfield_bc", "mesh.farfield_chords", "mesh.first_cell_height", "numerics.convection_scheme"],
+   "differs": [
+    {"settings": ["physics.wall_treatment", "mesh.first_cell_height"],
+     "text": "This case resolves the wall: the first cell centre is at y+ below 1 and nut is fixed at zero on the aerofoil. The studio's default uses wall functions with a first cell sized for y+ of about 40."},
+    {"settings": ["mesh.farfield_chords", "physics.farfield_bc"],
+     "text": "This case uses freestreamVelocity and freestreamPressure on a domain about 1000 chords across. The studio's default is a fixed-velocity inlet with a fixed-pressure outlet 30 chords away."}
+   ],
+   "url": "https://doc.openfoam.com/2606/examples/verification-validation/turbulent/naca0012/",
+   "url_verified": true,
+   "checked": "2026-11-18"
+  },
+  {
+   "id": "project-reference-4412",
+   "title": "Reference run of the studio: NACA 4412, Re 2e6, 4 degrees",
+   "kind": "project-measurement",
+   "source": "docs/openfoam-tools.md, 'Reference runs'; wingstudio/agents/prompts/planner.md, 'Values, with the reasoning to adapt them'; wingstudio/agents/prompts/run-monitor.md, 'What a healthy run looks like'",
+   "locator": "wingstudio/agents/prompts/run-monitor.md, first paragraph of 'What a healthy run looks like'; docs/openfoam-tools.md, the naca4412 note of 'Reference runs'",
+   "says": "With the default mesh (23,400 cells) and the default numerics, NACA 4412 at Re 2e6 and 4 degrees gives Cl 0.886, Cd 0.0131, Cm -0.097. The forces are steady by about iteration 750 and 1000 iterations take about 45 s.",
+   "settings": ["mesh.n_normal", "mesh.n_leading", "mesh.n_aft", "mesh.n_wake", "physics.turbulence_model", "numerics.iterations", "numerics.relax_p", "numerics.relax_U", "numerics.relax_turbulence", "solve.extend_iterations"],
+   "url": "",
+   "url_verified": false,
+   "checked": "2026-11-18"
+  },
+  {
+   "id": "project-farfield-30",
+   "title": "The 30-chord far field: stability limit and its drag cost",
+   "kind": "project-measurement",
+   "source": "wingstudio/cfd/case.py, comment on DEFAULT_MESH and farfield_drag_estimate; wingstudio/agents/prompts/xfoil-validator.md, 'What to expect'; wingstudio/study/planning.py, default_plan (assumptions)",
+   "locator": "wingstudio/cfd/case.py: the comment at the top of DEFAULT_MESH and the function farfield_drag_estimate",
+   "says": "This C-mesh block topology diverges within about 50 iterations when the far field is beyond about 30 chords; at 30 chords a fixed-velocity inlet with a fixed-pressure outlet is the stable condition. The cost is a spurious drag of about Cl^2 / (4 pi R): 0.0021 at Cl 0.886, which takes the reference Cd of 0.0131 to 0.0110 against XFoil's 0.0112.",
+   "settings": ["mesh.farfield_chords", "mesh.wake_chords", "physics.farfield_bc"],
+   "url": "",
+   "url_verified": false,
+   "checked": "2026-11-18"
+  },
+  {
+   "id": "project-yplus-40",
+   "title": "Target y+ 40 with wall functions: measured result and the accepted band",
+   "kind": "project-measurement",
+   "source": "wingstudio/agents/prompts/mesher.md, 'First-cell height and y+'; wingstudio/study/planning.py, DEFAULT_TARGET_YPLUS and yplus_band",
+   "locator": "wingstudio/agents/prompts/mesher.md, the wall-functions item of 'First-cell height and y+'; wingstudio/study/planning.py: yplus_band",
+   "says": "A first cell sized for y+ 40 with the flat-plate estimate gave a measured y+ of 6 to 74, average 44, on NACA 4412 at Re 2e6. The gates accept an average of 20 to 200 with wall functions and at most 5 with a resolved wall.",
+   "settings": ["mesh.first_cell_height", "physics.wall_treatment"],
+   "url": "",
+   "url_verified": false,
+   "checked": "2026-11-18"
+  },
+  {
+   "id": "project-residual-1e-6",
+   "title": "Residual targets of 1e-6: why not 1e-5",
+   "kind": "project-measurement",
+   "source": "wingstudio/cfd/case.py, comment on DEFAULT_NUMERICS; wingstudio/agents/prompts/solver-setup.md, 'What is fixed and what you choose'",
+   "locator": "wingstudio/cfd/case.py: the comment above residual_p in DEFAULT_NUMERICS",
+   "says": "With residual targets of 1e-5 a run at Re 4e5 stopped at iteration 385 while Cl still moved by 0.009 over 200 iterations; with 1e-6 it ended at iteration 505 with the forces settled. The targets are kept tight so that the iteration count and the force drift decide when a run is done.",
+   "settings": ["numerics.residual_p", "numerics.residual_U", "numerics.residual_turbulence"],
+   "url": "",
+   "url_verified": false,
+   "checked": "2026-11-18"
+  },
+  {
+   "id": "project-gate-limits",
+   "title": "The studio's acceptance limits (gates and hard ranges)",
+   "kind": "project-rule",
+   "source": "wingstudio/gates.py: gate_mesh, gate_solve; wingstudio/study/planning.py: SETTING_LIMITS, MAX_CELLS, MAX_TOTAL_ITERATIONS, validate_plan; docs/openfoam-tools.md, 'Decision rules'",
+   "locator": "wingstudio/study/planning.py: MAX_CELLS, MAX_TOTAL_ITERATIONS, SETTING_LIMITS; wingstudio/gates.py: gate_mesh and gate_solve",
+   "says": "Limits checked by code: non-orthogonality below 70 and skewness below 4, at most 80,000 cells, 300 to 6000 planned iterations (12,000 with extensions), and forces counted as converged when Cl moves by less than 1e-3 and Cd by less than 1e-4 over the last 200 iterations. Above about 60 degrees of non-orthogonality one or two correctors are added.",
+   "settings": ["mesh.n_normal", "numerics.iterations", "numerics.n_non_orthogonal_correctors", "solve.extend_iterations"],
+   "url": "",
+   "url_verified": false,
+   "checked": "2026-11-18"
+  },
+  {
+   "id": "project-validation-bands",
+   "title": "Verdict bands against XFoil and what stored runs achieved",
+   "kind": "project-rule",
+   "source": "wingstudio/gates.py: verdict_for, lift_bands; wingstudio/agents/prompts/xfoil-validator.md, 'What to expect'",
+   "locator": "wingstudio/gates.py: verdict_for and lift_bands; wingstudio/agents/prompts/xfoil-validator.md, 'What to expect'",
+   "says": "Pass means lift within 5% of XFoil (at least 0.01) and drag within 25%; warn means 10% (at least 0.02) and 50%. The reference run and seven other sections (NACA 2412 to 5414, Re 4e5 to 1.5e6) gave lift between -1.8% and +4.5% and drag 14 to 17% above XFoil, most of it the known far-field drag.",
+   "settings": ["validate.transition", "validate.mach"],
+   "url": "",
+   "url_verified": false,
+   "checked": "2026-11-18"
+  },
+  {
+   "id": "project-xfoil-like-for-like",
+   "title": "Like-for-like rule: one profile, same Reynolds number and angle, tripped at 5%, Mach 0",
+   "kind": "project-rule",
+   "source": "wingstudio/cfd/xfoil.py, module docstring; foamtools/naca.py, naca4_point; wingstudio/study/planning.py, XTR_FORCED",
+   "locator": "wingstudio/cfd/xfoil.py, module docstring ('Like-for-like with a fully turbulent RANS run'); wingstudio/study/planning.py, XTR_FORCED",
+   "says": "Both solvers use one shape, the closed-trailing-edge four-digit profile (thickness polynomial ending in -0.1036 x^4), and XFoil runs at the same Reynolds number and angle with transition tripped at 5% chord and Mach 0, because the RANS run is fully turbulent and incompressible. Each case's angle is the one at which this set-up reaches the design lift; on NACA 4412 at Re 2e6 and 4 degrees it gives Cl 0.864, Cd 0.0112, Cm -0.090.",
+   "settings": ["case.alpha_deg", "geometry.naca", "validate.transition", "validate.mach", "validate.flight_mach"],
+   "url": "",
+   "url_verified": false,
+   "checked": "2026-11-18"
+  }
+ ],
+ "defaults": {
+  "case.alpha_deg": ["project-xfoil-like-for-like", "drela-1989-xfoil"],
+  "geometry.naca": ["naca-tr-460", "abbott-vondoenhoff-1959", "project-xfoil-like-for-like"],
+  "mesh.farfield_chords": ["project-farfield-30", "nasa-tmr-naca0012", "thomas-salas-1986"],
+  "mesh.wake_chords": ["project-farfield-30"],
+  "mesh.n_normal": ["project-reference-4412", "project-gate-limits"],
+  "mesh.n_leading": ["project-reference-4412"],
+  "mesh.n_aft": ["project-reference-4412"],
+  "mesh.n_wake": ["project-reference-4412"],
+  "mesh.first_cell_height": ["project-yplus-40", "white-fluid-mechanics", "openfoam-wall-functions"],
+  "physics.turbulence_model": ["spalart-allmaras-1992", "openfoam-naca0012-validation", "project-reference-4412"],
+  "physics.wall_treatment": ["spalding-1961", "openfoam-wall-functions", "project-yplus-40"],
+  "physics.nut_ratio": ["nasa-tmr-spalart-allmaras", "openfoam-naca0012-validation"],
+  "physics.farfield_bc": ["project-farfield-30", "openfoam-freestream-bc", "thomas-salas-1986"],
+  "numerics.iterations": ["project-reference-4412", "project-gate-limits"],
+  "numerics.convection_scheme": ["openfoam-linearupwind"],
+  "numerics.relax_p": ["ferziger-peric-2020", "openfoam-simple-relaxation", "project-reference-4412"],
+  "numerics.relax_U": ["ferziger-peric-2020", "openfoam-simple-relaxation", "project-reference-4412"],
+  "numerics.relax_turbulence": ["openfoam-simple-relaxation", "project-reference-4412"],
+  "numerics.residual_p": ["project-residual-1e-6"],
+  "numerics.residual_U": ["project-residual-1e-6"],
+  "numerics.residual_turbulence": ["project-residual-1e-6"],
+  "numerics.n_non_orthogonal_correctors": ["project-gate-limits", "openfoam-checkmesh-thresholds"],
+  "numerics.consistent": ["openfoam-simple-algorithm"],
+  "solve.extend_iterations": ["project-gate-limits", "project-reference-4412"],
+  "validate.transition": ["project-xfoil-like-for-like", "xfoil-primer", "project-validation-bands"],
+  "validate.mach": ["project-xfoil-like-for-like", "xfoil-primer"]
+ }
+}

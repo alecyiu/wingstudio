@@ -1,0 +1,36 @@
+[project]
+name = "wing-studio"
+version = "0.1.0"
+description = "LLM agents that set up, run and check OpenFOAM simulations of airfoil sections"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "litellm>=1.109",
+    "matplotlib>=3.8",
+    "numpy>=1.26",
+    "pyyaml>=6.0",
+    "uvicorn>=0.30",
+]
+
+[project.scripts]
+wing-studio = "wingstudio.server:main"
+foam-agent = "foamtools.agent:main"
+sim = "foamtools.sim:main"
+of = "foamtools.docker:main"
+
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["foamtools*", "wingstudio*"]
+
+[tool.ruff]
+line-length = 120
+extend-exclude = ["cases", "runs", "studio_data"]
+
+[tool.ruff.lint]
+select = ["E9", "F", "I"]

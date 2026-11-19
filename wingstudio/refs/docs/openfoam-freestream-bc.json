@@ -1,0 +1,29 @@
+{
+  "id": "openfoam-freestream-bc",
+  "title": "OpenFOAM documentation: freestream boundary condition",
+  "source_url": "https://doc.openfoam.com/2606/tools/processing/boundary-conditions/rtm/derived/inletOutlet/freestream/",
+  "retrieved": "2026-11-18",
+  "licence": "\"Copyright © OpenCFD Ltd. Documentation licence: CC BY-NC-ND 4.0.\" (footer of the page)",
+  "scope": "excerpts",
+  "raw_file": "page.html",
+  "passages": [
+    {
+      "key": "mixed-switch-on-flux",
+      "heading": "Description",
+      "text": "The freestream is a generic boundary condition that provides a free-stream condition. It is a mixed condition derived from the inletOutlet condition, whereby the mode of operation switches between fixed (free stream) value and zero gradient based on the sign of the flux.",
+      "settings": [
+        "physics.farfield_bc"
+      ],
+      "why": "With farfield_bc set to freestream the turbulence fields use this condition (free-stream value where the flux enters, zero gradient where it leaves); velocity and pressure use the related freestreamVelocity and freestreamPressure types, which this page does not describe."
+    },
+    {
+      "key": "where-set",
+      "heading": "Usage",
+      "text": "The condition requires entries in both the boundary and field files.",
+      "settings": [
+        "physics.farfield_bc"
+      ],
+      "why": "The outer patch is an ordinary patch in the mesh and gets type freestream with a freestreamValue in each field file."
+    }
+  ]
+}

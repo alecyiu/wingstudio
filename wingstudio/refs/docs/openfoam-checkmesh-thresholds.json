@@ -1,0 +1,58 @@
+{
+  "id": "openfoam-checkmesh-thresholds",
+  "title": "OpenFOAM v2512 source: primitiveMeshCheck.C (default mesh-check thresholds)",
+  "source_url": "https://api.openfoam.com/2512/primitiveMeshCheck_8C_source.html",
+  "retrieved": "2026-11-18",
+  "licence": "\"Copyright (C) 2011-2016 OpenFOAM Foundation\", \"Copyright (C) 2019-2022 OpenCFD Ltd.\" and \"OpenFOAM is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\" (header of the source file, lines 8 to 17; the API page states no licence of its own)",
+  "scope": "excerpts",
+  "raw_file": "page.html",
+  "passages": [
+    {
+      "key": "non-orthogonality-70",
+      "heading": "Static Data Members",
+      "text": "Foam::scalar Foam::primitiveMesh::nonOrthThreshold_ = 70; // deg",
+      "settings": [
+        "mesh.n_normal",
+        "numerics.n_non_orthogonal_correctors"
+      ],
+      "why": "The default non-orthogonality threshold of the mesh check is 70 degrees, the limit the studio's mesh gate uses."
+    },
+    {
+      "key": "non-orthogonality-severe-not-error",
+      "heading": "Private Member Functions",
+      "text": "// Severe nonorthogonality threshold",
+      "settings": [
+        "mesh.n_normal",
+        "numerics.n_non_orthogonal_correctors"
+      ],
+      "why": "In the code under this comment a face beyond 70 degrees is counted as severely non-orthogonal and reported, but the check fails only for faces at 90 degrees or more; the studio's gate is stricter and refuses the mesh at 70."
+    },
+    {
+      "key": "skewness-4",
+      "heading": "Static Data Members",
+      "text": "Foam::scalar Foam::primitiveMesh::skewThreshold_ = 4;",
+      "settings": [
+        "mesh.n_normal"
+      ],
+      "why": "The default skewness threshold of the mesh check is 4, the second hard limit of the studio's mesh gate."
+    },
+    {
+      "key": "aspect-ratio-1000",
+      "heading": "Static Data Members",
+      "text": "Foam::scalar Foam::primitiveMesh::aspectThreshold_ = 1000;",
+      "settings": [
+        "mesh.n_normal"
+      ],
+      "why": "The default aspect-ratio threshold is 1000; thin cells next to the wall can exceed it, and the studio's gate does not fail on it."
+    },
+    {
+      "key": "skewness-meaning",
+      "heading": "Private Member Functions",
+      "text": "// This does not cause trouble but is a good indication of a poor mesh.",
+      "settings": [
+        "mesh.n_normal"
+      ],
+      "why": "The source describes high skewness as a sign of a poor mesh, not as something that stops a run; the check still reports failure above 4, as the studio's gate does."
+    }
+  ]
+}

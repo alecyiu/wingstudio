@@ -1,0 +1,47 @@
+{
+  "id": "openfoam-linearupwind",
+  "title": "OpenFOAM documentation: Linear-upwind divergence scheme",
+  "source_url": "https://doc.openfoam.com/2606/tools/processing/numerics/schemes/divergence/rtm/linearUpwind/",
+  "retrieved": "2026-11-18",
+  "licence": "\"Copyright © OpenCFD Ltd. Documentation licence: CC BY-NC-ND 4.0.\" (footer of the page)",
+  "scope": "excerpts",
+  "raw_file": "page.html",
+  "passages": [
+    {
+      "key": "upwind-weights-gradient-correction",
+      "heading": "Properties",
+      "text": "Employs upwind interpolation weights, with an explicit correction based on the local cell gradient",
+      "settings": [
+        "numerics.convection_scheme"
+      ],
+      "why": "linearUpwind is upwind interpolation plus a correction from the cell gradient, which is why the scheme entry names a gradient."
+    },
+    {
+      "key": "second-order",
+      "heading": "Properties",
+      "text": "Second order",
+      "settings": [
+        "numerics.convection_scheme"
+      ],
+      "why": "The page classes linearUpwind as second order, the reason the studio prefers it to first-order upwind."
+    },
+    {
+      "key": "unbounded",
+      "heading": "Properties",
+      "text": "Unbounded",
+      "settings": [
+        "numerics.convection_scheme"
+      ],
+      "why": "The page classes the scheme as unbounded, so it can overshoot where gradients are steep; the word 'bounded' in the studio's entry belongs to 'bounded Gauss', the steady-state form of the Gauss term, and does not change that."
+    },
+    {
+      "key": "usage-entry",
+      "heading": "Usage",
+      "text": "Gauss linearUpwind grad(U);",
+      "settings": [
+        "numerics.convection_scheme"
+      ],
+      "why": "This is the fvSchemes entry the page gives for the momentum convection term; the studio writes 'bounded Gauss linearUpwind grad(U)', which this page does not show."
+    }
+  ]
+}

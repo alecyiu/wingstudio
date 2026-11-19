@@ -1,0 +1,65 @@
+{
+ "_about": "Example missions offered on the mission page (wingstudio/server.py load_presets). Each preset gives the flight condition, the objective and its constraints.",
+ "presets": [
+  {
+   "label": "Small electric UAV, sea-level cruise",
+   "mach": 0.05,
+   "density_kg_m3": 1.225,
+   "reynolds": 400000,
+   "design_cl": 0.6,
+   "objective": "Maximise lift-to-drag ratio at the design lift coefficient (best range per battery charge).",
+   "constraints": "t/c >= 0.10; Clmax >= 1.3; |Cm c/4| <= 0.08; angle sweep 0-8 deg. Derived (ISA sea level, 288.15 K): V = 17.0 m/s, chord = 0.343 m, q = 177 Pa. Caveat to show the user: at Re 4e5 the real flow is transitional, so fully turbulent RANS will over-predict drag; free-transition XFoil is the more realistic reference. Expected candidates: NACA 4412 and NACA 4410 (or 2412 for lower moment).",
+   "example_prompt": "Optimise a wing section for a small electric UAV cruising at Mach 0.05 at sea level (density 1.225 kg/m^3), Reynolds number 400,000, design lift coefficient 0.6, best lift-to-drag, at least 10% thick."
+  },
+  {
+   "label": "Sailplane, best glide at 1000 m",
+   "mach": 0.09,
+   "density_kg_m3": 1.112,
+   "reynolds": 1500000,
+   "design_cl": 0.8,
+   "objective": "Maximise lift-to-drag ratio at design Cl (best glide ratio); report Cl^1.5/Cd for minimum sink.",
+   "constraints": "t/c >= 0.14 (spar depth for a high-aspect-ratio wing); Clmax >= 1.4; |Cm c/4| <= 0.12; angle sweep 0-8 deg. Derived (ISA 1000 m, 281.65 K): V = 30.3 m/s, chord = 0.783 m, q = 510 Pa. Note: real sailplanes use laminar-flow sections; NACA 4-digit is the baseline family here. Expected candidates: NACA 4415 and NACA 6415 (or 4414).",
+   "example_prompt": "I want the best glide ratio for a sailplane wing at Mach 0.09, air density 1.112 kg/m^3 (about 1000 m), Reynolds number 1.5 million, design lift coefficient 0.8, minimum 14% thickness for the spar."
+  },
+  {
+   "label": "Light aircraft, cruise at 8000 ft",
+   "mach": 0.19,
+   "density_kg_m3": 0.963,
+   "reynolds": 5000000,
+   "design_cl": 0.35,
+   "objective": "Minimise drag coefficient at the cruise lift coefficient (maximum cruise L/D).",
+   "constraints": "t/c >= 0.12 (spar and fuel volume); Clmax >= 1.5 flaps up; |Cm c/4| <= 0.06 (trim drag); angle sweep 0-6 deg. Derived (ISA 8000 ft, 272.3 K): V = 62.9 m/s (122 kt), chord = 1.41 m, q = 1902 Pa. Prandtl-Glauert factor 1.019, so correction is optional. Expected candidates: NACA 2412 and NACA 2415 (or 3412).",
+   "example_prompt": "Pick an airfoil for a four-seat light aircraft cruising at Mach 0.19 at 8000 ft (density 0.963 kg/m^3), Reynolds number 5 million, cruise lift coefficient 0.35, lowest drag, at least 12% thick, pitching moment no worse than -0.06."
+  },
+  {
+   "label": "High-altitude long-endurance UAV, 18 km loiter",
+   "mach": 0.25,
+   "density_kg_m3": 0.121,
+   "reynolds": 600000,
+   "design_cl": 1,
+   "objective": "Maximise endurance parameter Cl^1.5/Cd at the design lift coefficient (minimum power).",
+   "constraints": "t/c >= 0.12; Clmax >= 1.5; |Cm c/4| <= 0.15; angle sweep 2-10 deg. Derived (ISA 18 km, 216.65 K, nu = 1.17e-4 m^2/s): V = 73.8 m/s, chord = 0.96 m, q = 329 Pa. Prandtl-Glauert factor 1.033. Caveat: low Reynolds number and high lift, so transition matters; fully turbulent RANS is conservative on drag. Expected candidates: NACA 6412 and NACA 4415 (or 6415).",
+   "example_prompt": "Design for maximum endurance on a high-altitude UAV loitering at Mach 0.25, air density 0.121 kg/m^3 (18 km), Reynolds number 600,000, design lift coefficient 1.0, at least 12% thick."
+  },
+  {
+   "label": "Wind-turbine blade, outboard section",
+   "mach": 0.2,
+   "density_kg_m3": 1.225,
+   "reynolds": 6000000,
+   "design_cl": 1,
+   "objective": "Maximise lift-to-drag ratio at design Cl with a rough (fully turbulent) surface, with gentle stall.",
+   "constraints": "t/c >= 0.18 (blade structure); no pitching-moment limit; performance must hold with leading-edge soiling, so the fully turbulent result is the one that counts; angle sweep 2-10 deg. Derived (sea level, 288.15 K): relative speed 68.1 m/s, chord = 1.29 m, q = 2837 Pa. This is the preset where fully turbulent RANS is the physically right model. Expected candidates: NACA 4418 and NACA 4421.",
+   "example_prompt": "Choose a blade section for the outer part of a wind-turbine blade: relative Mach 0.2, sea-level density 1.225 kg/m^3, Reynolds number 6 million, design lift coefficient 1.0, at least 18% thick, best lift-to-drag even when the leading edge is dirty."
+  },
+  {
+   "label": "Regional turboprop cruise at 25,000 ft (should warn: Mach too high)",
+   "mach": 0.6,
+   "density_kg_m3": 0.549,
+   "reynolds": 16000000,
+   "design_cl": 0.45,
+   "objective": "Minimise drag at the cruise lift coefficient.",
+   "constraints": "t/c >= 0.12; |Cm c/4| <= 0.06; Clmax >= 1.5. Derived (ISA 25,000 ft, 238.6 K): V = 185.8 m/s, chord = 2.42 m, q = 9476 Pa. DELIBERATELY OUTSIDE THE ENVELOPE: Prandtl-Glauert factor is 1.25 (lift under-stated by 25% if uncorrected), stagnation density change is 19%, and the critical pressure coefficient is -1.29, which a 12% cambered section reaches near this lift, so local sonic flow is likely. The app should warn, offer to continue as 'incompressible plus Karman-Tsien correction, indicative only', and point to a compressible solver (the image contains compressible/rhoSimpleFoam/aerofoilNACA0012). First cell height for y+ of 1 is 3.6e-6 chord.",
+   "example_prompt": "Optimise the wing section of a regional turboprop cruising at Mach 0.6 at 25,000 ft, density 0.549 kg/m^3, Reynolds number 16 million, cruise lift coefficient 0.45, at least 12% thick."
+  }
+ ]
+}

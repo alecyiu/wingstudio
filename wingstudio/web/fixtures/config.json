@@ -1,0 +1,109 @@
+{
+ "models": [
+  "anthropic/claude-haiku-5-5",
+  "anthropic/claude-sonnet-5-5",
+  "anthropic/claude-opus-5-5",
+  "scripted"
+ ],
+ "default_project_id": "naca-wing",
+ "stage_defs": [
+  {
+   "key": "geometry",
+   "title": "Geometry",
+   "agent": "geometry.md"
+  },
+  {
+   "key": "mesh",
+   "title": "Mesh",
+   "agent": "mesher.md"
+  },
+  {
+   "key": "physics",
+   "title": "Boundary conditions and physics",
+   "agent": "boundary-conditions.md"
+  },
+  {
+   "key": "numerics",
+   "title": "Solver setup",
+   "agent": "solver-setup.md"
+  },
+  {
+   "key": "solve",
+   "title": "Solve",
+   "agent": "run-monitor.md"
+  },
+  {
+   "key": "post",
+   "title": "Post-process",
+   "agent": "post-processor.md"
+  },
+  {
+   "key": "validate",
+   "title": "Validate against XFoil",
+   "agent": "xfoil-validator.md"
+  }
+ ],
+ "presets": [
+  {
+   "id": "ga-cruise",
+   "label": "Light aircraft cruise",
+   "prompt": "Wing section for a light aircraft cruising at Mach 0.15 at sea level. Reynolds number 3 million, design lift coefficient 0.5. Maximise L/D at the design point, at least 12% thick, |Cm| no more than 0.10, target L/D of at least 50.",
+   "requirements": {
+    "mach": 0.15,
+    "density": 1.225,
+    "reynolds": 3000000.0,
+    "design_cl": 0.5,
+    "objective": "max_ld",
+    "min_thickness": 0.12,
+    "max_abs_cm": 0.1,
+    "target_ld": 50.0,
+    "notes": ""
+   }
+  },
+  {
+   "id": "uav-endurance",
+   "label": "Endurance UAV loiter",
+   "prompt": "Loiter condition for a long-endurance UAV at 2,000 m: Mach 0.08, density 1.007 kg/m3, Reynolds number 1.2 million, design lift coefficient 0.8. Maximise endurance (Cl^1.5/Cd). Minimum thickness 12%.",
+   "requirements": {
+    "mach": 0.08,
+    "density": 1.007,
+    "reynolds": 1200000.0,
+    "design_cl": 0.8,
+    "objective": "max_endurance",
+    "min_thickness": 0.12,
+    "max_abs_cm": null,
+    "notes": ""
+   }
+  },
+  {
+   "id": "trainer-climb",
+   "label": "Trainer climb",
+   "prompt": "Climb segment of a trainer: Mach 0.12, sea-level density, Reynolds number 2 million, design lift coefficient 0.9. Lowest drag at that lift, 15% thick for spar depth.",
+   "requirements": {
+    "mach": 0.12,
+    "density": 1.225,
+    "reynolds": 2000000.0,
+    "design_cl": 0.9,
+    "objective": "min_cd",
+    "min_thickness": 0.15,
+    "max_abs_cm": 0.12,
+    "notes": ""
+   }
+  },
+  {
+   "id": "fast-cruise",
+   "label": "Fast cruise (Mach 0.35)",
+   "prompt": "Turboprop cruise at Mach 0.35 at 3,000 m (density 0.909 kg/m3), Reynolds number 6 million, design lift coefficient 0.35. Minimise drag; thickness at least 12%.",
+   "requirements": {
+    "mach": 0.35,
+    "density": 0.909,
+    "reynolds": 6000000.0,
+    "design_cl": 0.35,
+    "objective": "min_cd",
+    "min_thickness": 0.12,
+    "max_abs_cm": 0.08,
+    "notes": ""
+   }
+  }
+ ]
+}

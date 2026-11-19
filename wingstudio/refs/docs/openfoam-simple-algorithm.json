@@ -1,0 +1,55 @@
+{
+ "id": "openfoam-simple-algorithm",
+ "title": "OpenFOAM documentation: SIMPLE algorithm",
+ "source_url": "https://doc.openfoam.com/2606/tools/processing/solvers/pressure-velocity/simple/",
+ "retrieved": "2026-11-18",
+ "licence": "\"Copyright © OpenCFD Ltd. Documentation licence: CC BY-NC-ND 4.0.\" (footer of the page)",
+ "scope": "excerpts",
+ "raw_file": "page.html",
+ "passages": [
+  {
+   "key": "under-construction",
+   "heading": "SIMPLE algorithm",
+   "text": "This page is under construction.",
+   "settings": [
+    "numerics.consistent"
+   ],
+   "why": "The page is a stub: it lists the SIMPLE steps but does not describe SIMPLEC or the consistent switch."
+  },
+  {
+   "key": "momentum-relaxation-step",
+   "heading": "SIMPLE",
+   "text": "Under-relax the momentum matrix",
+   "settings": [
+    "numerics.relax_U"
+   ],
+   "why": "Momentum relaxation is applied to the matrix, at step 4 of the loop, before the momentum equations are solved."
+  },
+  {
+   "key": "pressure-relaxation-step",
+   "heading": "SIMPLE",
+   "text": "Under-relax $p^{n+1}$",
+   "settings": [
+    "numerics.relax_p"
+   ],
+   "why": "Pressure is under-relaxed as a field at step 9 of the loop, after the flux correction and before the velocity is corrected."
+  },
+  {
+   "key": "simplec-attribution",
+   "heading": "SIMPLEC",
+   "text": "By Van Doormaal and Raithby",
+   "settings": [
+    "numerics.consistent"
+   ],
+   "why": "SIMPLEC, the variant the consistent option switches on, is listed with its authors only; the studio keeps plain SIMPLE."
+  }
+ ],
+ "context": [
+  {
+   "key": "loop",
+   "heading": "SIMPLE",
+   "text": "The sequence for each iteration follows:",
+   "why": "The numbered list under this line is the SIMPLE loop: the momentum matrix is under-relaxed at step 4 and pressure at step 9, after the flux correction."
+  }
+ ]
+}

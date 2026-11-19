@@ -1,0 +1,112 @@
+{
+  "id": "nasa-tmr-naca0012",
+  "title": "2D NACA 0012 Airfoil Validation Case (Turbulence Modeling Resource)",
+  "source_url": "https://tmbwg.github.io/turbmodels/naca0012_val.html",
+  "retrieved": "2026-11-18",
+  "licence": "not stated on the page",
+  "scope": "excerpts",
+  "raw_file": "naca0012_val.html",
+  "passages": [
+    {
+      "key": "farfield-500-chords",
+      "heading": "2DN00: 2D NACA 0012 Airfoil Validation Case",
+      "raw_file": "naca0012_val.html",
+      "text": "To minimize issues associated with effect of the farfield boundary (which can particularly influence drag and lift levels at high lift conditions), the farfield boundary in the grids provided have been located almost 500 chords away from the airfoil.",
+      "settings": [
+        "mesh.farfield_chords"
+      ],
+      "why": "NASA's own grids put the outer boundary almost 500 chords away so that it does not change lift and drag; the studio's 30 chords is much closer."
+    },
+    {
+      "key": "farfield-30-chords-effect",
+      "heading": "Effect of Farfield Boundary",
+      "raw_file": "naca0012_val_ffeffect.html",
+      "text": "A farfield extent of 500 c is far enough for the finite boundary to have only a minimal influence on the solution. With smaller farfield boundary extents such as 30 c, the boundary influence on the forces is greater (especially for drag) unless one employs a \"farfield point vortex\" (PV) boundary condition correction.",
+      "settings": [
+        "mesh.farfield_chords",
+        "physics.farfield_bc"
+      ],
+      "why": "At the studio's 30 chords the boundary changes the forces, drag most of all, unless a point-vortex correction is used; the studio does not use one."
+    },
+    {
+      "key": "farfield-bc-variations",
+      "heading": "2DN00: 2D NACA 0012 Airfoil Validation Case",
+      "raw_file": "naca0012_val.html",
+      "text": "Note that particular variations of the BCs at the farfield boundaries may also work and yield similar results for this problem.",
+      "settings": [
+        "physics.farfield_bc"
+      ],
+      "why": "The case does not prescribe one far-field boundary condition; other variants are acceptable when they give similar results."
+    },
+    {
+      "key": "farfield-study-conditions",
+      "heading": "Effect of Farfield Boundary",
+      "raw_file": "naca0012_val_ffeffect.html",
+      "text": "The plots show examples of the effect of farfield grid extent on lift and drag coefficients (using the 449 x 129 base grid) for high-lift conditions on the NACA 0012 airfoil at alpha=15 deg.",
+      "settings": [
+        "mesh.farfield_chords"
+      ],
+      "why": "The far-field study that gives the 30-chord statement was made at 15 degrees, a high-lift condition."
+    },
+    {
+      "key": "grid-family-point-counts",
+      "heading": "Grids - NACA 0012 Airfoil Case",
+      "raw_file": "naca0012_grids.html",
+      "text": "There are 1025 points on the airfoil surface on the finest grid (65 points on the coarsest grid). There are 385 points along the wake from the airfoil trailing edge to the outflow boundary on the finest grid (25 points on the coarsest grid).",
+      "settings": [
+        "mesh.n_leading",
+        "mesh.n_aft",
+        "mesh.n_wake"
+      ],
+      "why": "NASA's C-grid family has 65 to 1025 points on the airfoil and 25 to 385 along the wake; the studio's default of 160 surface cells and 50 wake cells is close to the second-coarsest level (129 and 49 points)."
+    },
+    {
+      "key": "sa-freestream-value",
+      "heading": "SA Model Results",
+      "raw_file": "naca0012_val_sa.html",
+      "text": "Both CFL3D and FUN3D used freestream value of the SA turbulence field variable (relative to laminar)=3.",
+      "settings": [
+        "physics.nut_ratio"
+      ],
+      "why": "NASA's own Spalart-Allmaras runs of this case set the free-stream model variable to 3 times the molecular viscosity; the studio uses 4."
+    },
+    {
+      "key": "sst-freestream-values",
+      "heading": "SSTm Model Results",
+      "raw_file": "naca0012_val_sst.html",
+      "text": "Both CFL3D and FUN3D used freestream turbulence intensity=0.052% and freestream turbulent viscosity (relative to laminar)=0.009",
+      "settings": [
+        "physics.turbulence_intensity",
+        "physics.nut_ratio"
+      ],
+      "why": "NASA's SST runs of this case used a free-stream intensity of 0.052% and an eddy-viscosity ratio of 0.009; the studio's SST guidance is 0.1% and a ratio of 1, about a hundred times more eddy viscosity."
+    }
+  ],
+  "section_sources": [
+    {
+      "heading": "2DN00: 2D NACA 0012 Airfoil Validation Case",
+      "raw_file": "naca0012_val.html",
+      "source_url": "https://tmbwg.github.io/turbmodels/naca0012_val.html"
+    },
+    {
+      "heading": "Effect of Farfield Boundary",
+      "raw_file": "naca0012_val_ffeffect.html",
+      "source_url": "https://tmbwg.github.io/turbmodels/naca0012_val_ffeffect.html"
+    },
+    {
+      "heading": "Grids - NACA 0012 Airfoil Case",
+      "raw_file": "naca0012_grids.html",
+      "source_url": "https://tmbwg.github.io/turbmodels/naca0012_grids.html"
+    },
+    {
+      "heading": "SA Model Results",
+      "raw_file": "naca0012_val_sa.html",
+      "source_url": "https://tmbwg.github.io/turbmodels/naca0012_val_sa.html"
+    },
+    {
+      "heading": "SSTm Model Results",
+      "raw_file": "naca0012_val_sst.html",
+      "source_url": "https://tmbwg.github.io/turbmodels/naca0012_val_sst.html"
+    }
+  ]
+}

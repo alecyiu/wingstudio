@@ -1,0 +1,22 @@
+# Secrets and local environments
+.env
+.venv/
+.venv-viewer/
+
+# Run-time data: simulation cases, agent transcripts, studio data
+/cases/
+/runs/
+/studio_data/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Editor and OS files
+.DS_Store
+.claude/
+.idea/
+.vscode/

@@ -1,0 +1,152 @@
+<!doctype html>
+<!-- Stand-in for the ParaView viewer in the UI mock mode. It draws a schematic
+     C-mesh or a schematic field around the NACA section so the iframe, the view
+     presets and the field selector can be exercised without ParaView. The
+     picture is illustrative: it is not a CFD result. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Mock viewer</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #51576e; overflow: hidden; font: 12px system-ui, sans-serif; }
+  canvas { display: block; width: 100%; height: 100%; cursor: grab; }
+  #tag { position: absolute; left: 8px; top: 8px; color: #fff; background: rgba(0,0,0,.45); padding: 3px 7px; border-radius: 3px; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="tag"></div>
+<script>
+(function () {
+  'use strict';
+  const q = new URLSearchParams(location.search);
+  const caseId = q.get('case'), naca = (q.get('naca') || '2412').padStart(4, '0');
+  const canvas = document.getElementById('c'), ctx = canvas.getContext('2d'), tag = document.getElementById('tag');
+  let state = { mode: 'mesh', field: 'U', zoom: 'auto' };
+  let box = [-0.4, 1.4, -0.55, 0.55];
+
+  const m = +naca[0] / 100, p = +naca[1] / 10, t = +naca.slice(2) / 100;
+  function surface(x) {
+    const yt = 5 * t * (0.2969 * Math.sqrt(x) - 0.126 * x - 0.3516 * x * x + 0.2843 * x ** 3 - 0.1036 * x ** 4);
+    let yc = 0;
+    if (m > 0 && p > 0) yc = x < p ? m / (p * p) * (2 * p * x - x * x) : m / ((1 - p) ** 2) * (1 - 2 * p + 2 * p * x - x * x);
+    return [yc + yt, yc - yt];
+  }
+  function zoomBox(zoom) {
+    if (Array.isArray(zoom)) return zoom.map(Number);
+    if (zoom === 'full') return [-30, 31, -30, 30];
+    if (typeof zoom === 'string' && zoom.includes(',')) return zoom.split(',').map(Number);
+    return [-0.4, 1.4, -0.55, 0.55];
+  }
+  function fit() {
+    // keep the aspect ratio of the canvas: grow the box around its centre
+    const w = canvas.width, h = canvas.height;
+    let [x0, x1, y0, y1] = box;
+    const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
+    let sx = (x1 - x0) / w, sy = (y1 - y0) / h;
+    const s = Math.max(sx, sy);
+    return { s, cx, cy, X: (x) => w / 2 + (x - cx) / s, Y: (y) => h / 2 - (y - cy) / s };
+  }
+  // rainbow-free colour map: blue - grey - red
+  function colour(v) {
+    v = Math.max(0, Math.min(1, v));
+    const a = v < 0.5 ? [42, 120, 214] : [240, 239, 236], b = v < 0.5 ? [240, 239, 236] : [227, 73, 72];
+    const f = v < 0.5 ? v * 2 : (v - 0.5) * 2;
+    return `rgb(${a.map((c, i) => Math.round(c + (b[i] - c) * f)).join(',')})`;
+  }
+  function fieldValue(x, y) {
+    // schematic only: faster flow above the section, slower below and in the wake
+    const xc = Math.max(0, Math.min(1, x)), [yu, yl] = surface(xc);
+    const d = y > yu ? y - yu : y < yl ? yl - y : 0;
+    const near = Math.exp(-d / 0.18) * Math.exp(-Math.max(0, -x) / 0.25) * Math.exp(-Math.max(0, x - 1) / 0.6);
+    let v = 0.5 + (y > (yu + yl) / 2 ? 0.32 : -0.14) * near * (1 - 0.6 * xc);
+    if (x > 1 && Math.abs(y) < 0.02 + 0.02 * (x - 1)) v -= 0.25 * Math.exp(-(x - 1) / 1.5);
+    if (state.field === 'p') v = 1 - v;
+    if (state.field === 'nut' || state.field === 'nuTilda') v = 0.05 + 0.9 * near * xc + (x > 1 && Math.abs(y) < 0.05 + 0.05 * (x - 1) ? 0.5 * Math.exp(-(x - 1) / 3) : 0);
+    return v;
+  }
+  function draw() {
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = canvas.clientWidth * dpr; canvas.height = canvas.clientHeight * dpr;
+    const f = fit(), w = canvas.width, h = canvas.height;
+    ctx.fillStyle = '#51576e'; ctx.fillRect(0, 0, w, h);
+    if (state.mode === 'field') {
+      const step = 6 * dpr;
+      for (let px = 0; px < w; px += step) for (let py = 0; py < h; py += step) {
+        const x = f.cx + (px + step / 2 - w / 2) * f.s, y = f.cy - (py + step / 2 - h / 2) * f.s;
+        if (Math.hypot(x - 0.3, y) > 30.5 && x < 0.3) continue;
+        ctx.fillStyle = colour(fieldValue(x, y)); ctx.fillRect(px, py, step, step);
+      }
+    } else {
+      // C-mesh: rays normal to the surface and loops around it, geometric growth
+      ctx.fillStyle = '#e9e9ef'; ctx.beginPath(); ctx.arc(f.X(0.3), f.Y(0), 30 / f.s, Math.PI / 2, -Math.PI / 2); ctx.rect(f.X(0.3), f.Y(30), 30.7 / f.s, 60 / f.s); ctx.fill();
+      ctx.strokeStyle = 'rgba(40,46,70,.55)'; ctx.lineWidth = 1;
+      const layers = [];
+      let d = 0.0009, r = 0;
+      for (let i = 0; i < 90; i++) { r += d; layers.push(r); d *= 1.105; }
+      const ring = (off) => {
+        const pts = [];
+        for (let i = 60; i >= 0; i--) { const x = 0.5 * (1 - Math.cos(Math.PI * i / 60)); pts.push([x, surface(x)[0], 1]); }
+        for (let i = 1; i <= 60; i++) { const x = 0.5 * (1 - Math.cos(Math.PI * i / 60)); pts.push([x, surface(x)[1], -1]); }
+        return pts.map(([x, y, side]) => {
+          const nx = x < 0.08 ? (x - 0.08) / 0.08 : 0, len = Math.hypot(nx, 1);
+          return [x + off * nx / len, y + side * off / len];
+        });
+      };
+      for (let i = 0; i < layers.length; i += (f.s > 0.01 ? 6 : 2)) {
+        const pts = ring(layers[i]);
+        ctx.beginPath(); pts.forEach(([x, y], k) => (k ? ctx.lineTo(f.X(x), f.Y(y)) : ctx.moveTo(f.X(x), f.Y(y))));
+        ctx.moveTo(f.X(1), f.Y(layers[i])); ctx.lineTo(f.X(31), f.Y(layers[i]));
+        ctx.moveTo(f.X(1), f.Y(-layers[i])); ctx.lineTo(f.X(31), f.Y(-layers[i]));
+        ctx.stroke();
+      }
+      const inner = ring(0), outer = ring(30);
+      ctx.beginPath();
+      for (let k = 0; k < inner.length; k += 2) { ctx.moveTo(f.X(inner[k][0]), f.Y(inner[k][1])); ctx.lineTo(f.X(outer[k][0]), f.Y(outer[k][1])); }
+      let wx = 1, dw = 0.0175;
+      for (let i = 0; i < 50; i++) { wx += dw; dw *= 1.09; ctx.moveTo(f.X(wx), f.Y(30)); ctx.lineTo(f.X(wx), f.Y(-30)); }
+      ctx.stroke();
+    }
+    // the section itself
+    ctx.beginPath();
+    for (let i = 0; i <= 80; i++) { const x = 0.5 * (1 - Math.cos(Math.PI * i / 80)); ctx[i ? 'lineTo' : 'moveTo'](f.X(x), f.Y(surface(x)[0])); }
+    for (let i = 80; i >= 0; i--) { const x = 0.5 * (1 - Math.cos(Math.PI * i / 80)); ctx.lineTo(f.X(x), f.Y(surface(x)[1])); }
+    ctx.closePath(); ctx.fillStyle = '#51576e'; ctx.fill(); ctx.strokeStyle = '#11131c'; ctx.lineWidth = 1.5 * dpr; ctx.stroke();
+    tag.textContent = `Mock viewer (schematic, not ParaView) · NACA ${naca} · ${state.mode === 'mesh' ? 'mesh' : 'field ' + state.field}`;
+  }
+  function apply(next) {
+    const zoomChanged = JSON.stringify(next.zoom) !== JSON.stringify(state.zoom);
+    state = Object.assign({}, state, next);
+    if (zoomChanged || next.forceZoom) box = zoomBox(state.zoom);
+    draw();
+  }
+  // the mock server announces view changes on this channel
+  try {
+    const channel = new BroadcastChannel('as-mock-viewer');
+    channel.onmessage = (ev) => { if (ev.data && ev.data.case === caseId) apply(ev.data.state); };
+  } catch (e) { /* no BroadcastChannel: the view stays on its defaults */ }
+  window.addEventListener('message', (ev) => { if (ev.data && ev.data.case === caseId && ev.data.state) apply(ev.data.state); });
+
+  // pan and wheel-zoom, like the 2D interaction of the real viewer
+  let drag = null;
+  canvas.addEventListener('pointerdown', (ev) => { drag = { x: ev.clientX, y: ev.clientY, box: box.slice() }; canvas.setPointerCapture(ev.pointerId); });
+  canvas.addEventListener('pointermove', (ev) => {
+    if (!drag) return;
+    const s = fit().s * (window.devicePixelRatio || 1), dx = (ev.clientX - drag.x) * s, dy = (ev.clientY - drag.y) * s;
+    box = [drag.box[0] - dx, drag.box[1] - dx, drag.box[2] + dy, drag.box[3] + dy];
+    draw();
+  });
+  canvas.addEventListener('pointerup', () => { drag = null; });
+  canvas.addEventListener('wheel', (ev) => {
+    ev.preventDefault();
+    const k = ev.deltaY > 0 ? 1.15 : 1 / 1.15, cx = (box[0] + box[1]) / 2, cy = (box[2] + box[3]) / 2;
+    box = [cx + (box[0] - cx) * k, cx + (box[1] - cx) * k, cy + (box[2] - cy) * k, cy + (box[3] - cy) * k];
+    draw();
+  }, { passive: false });
+  window.addEventListener('resize', draw);
+  box = zoomBox(state.zoom);
+  draw();
+})();
+</script>
+</body>
+</html>

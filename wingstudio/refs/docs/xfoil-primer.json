@@ -1,0 +1,177 @@
+{
+  "id": "xfoil-primer",
+  "title": "XFOIL 6.9 User Primer",
+  "source_url": "https://web.mit.edu/drela/Public/web/xfoil/xfoil_doc.txt",
+  "retrieved": "2026-11-18",
+  "licence": "\"XFOIL is released under the GNU General Public License.\" (statement on the XFOIL site, https://web.mit.edu/drela/Public/web/xfoil/; the primer text carries no licence or copyright line of its own)",
+  "scope": "full",
+  "raw_file": "xfoil_doc.txt",
+  "passages": [
+    {
+      "key": "trip-location-x-over-c",
+      "heading": "Units",
+      "text": "Examples are the camber line shape and BL trip locations, which are specified in terms of the relative x/c,y/c along and normal to the airfoil chord line.",
+      "settings": [
+        "validate.transition"
+      ],
+      "why": "Trip locations are fractions of chord, so the studio's 0.05 means 5% chord on each surface."
+    },
+    {
+      "key": "transition-forced-or-free",
+      "heading": "Analysis",
+      "text": "The e^n method is always active, and free transition can occur upstream of the trip.",
+      "settings": [
+        "validate.transition"
+      ],
+      "why": "A trip sets the latest point of transition, not the only one: free transition can still happen ahead of the 5% chord trip."
+    },
+    {
+      "key": "ncrit",
+      "heading": "Analysis",
+      "text": "The e^n method has the user-specified parameter \"Ncrit\", which is the log of the amplification factor of the most-amplified frequency which triggers transition. A suitable value of this parameter depends on the ambient disturbance level in which the airfoil operates, and mimics the effect of such disturbances on transition.",
+      "settings": [
+        "validate.transition"
+      ],
+      "why": "Ncrit decides how early free transition starts; the studio keeps the standard value 9, which has little influence once the trip is at 5% chord because free transition would have to occur ahead of the trip."
+    },
+    {
+      "key": "trip-defaults",
+      "heading": "Start-up Defaults",
+      "text": "Line 14: Forced transition x/c locations on top,bottom sides",
+      "settings": [
+        "validate.transition"
+      ],
+      "why": "The trip is set separately for the top and bottom surface, and the listed default of 1.0 for both leaves transition free up to the trailing edge."
+    },
+    {
+      "key": "viscous-formulation",
+      "heading": "General Description",
+      "text": "The boundary layers and wake are described with a two-equation lagged dissipation integral BL formulation and an envelope e^n transition criterion, both taken from the transonic analysis/design ISES code.",
+      "settings": [
+        "validate.transition"
+      ],
+      "why": "XFoil's viscous mode is a panel method coupled to an integral boundary layer with e^n transition; every reference number in the studio comes from this model."
+    },
+    {
+      "key": "mach-karman-tsien",
+      "heading": "General Description",
+      "text": "A Karman-Tsien compressibility correction is incorporated, allowing good compressible predictions all the way to sonic conditions. The theoretical foundation of the Karman-Tsien correction breaks down in supersonic flow, and as a result accuracy rapidly degrades as the transonic regime is entered.",
+      "settings": [
+        "validate.mach",
+        "validate.flight_mach"
+      ],
+      "why": "Mach number enters XFoil as a Karman-Tsien correction to an incompressible solution, good only for subsonic flow; at Mach 0 there is no correction, which matches the incompressible RANS run."
+    },
+    {
+      "key": "mach-cp-correction",
+      "heading": "Analysis",
+      "text": "The pressure coefficient Cp is calculated using the Karman-Tsien compressibility correction.",
+      "settings": [
+        "validate.mach"
+      ],
+      "why": "Surface pressure, and the lift and moment integrated from it, carry the Mach correction, so the like-for-like reference has to run at Mach 0."
+    },
+    {
+      "key": "mach-supersonic-caveat",
+      "heading": "Caveats",
+      "text": "As a rule of thumb, if the maximum Mach number doesn't exceed 1.05 anywhere, shock losses will be very small, the Cp distributions will be reasonably accurate, and the drag predicted by XFOIL is likely to be accurate.",
+      "settings": [
+        "validate.flight_mach"
+      ],
+      "why": "Says how far the extra XFoil run at the flight Mach number can be trusted: only while the local flow stays essentially subsonic."
+    },
+    {
+      "key": "alpha-sequencing",
+      "heading": "Caveats",
+      "text": "The Newton solution method always uses the last available solution as a starting guess for a new solution, and works best if the change from the old to the new solutions is reasonably small.",
+      "settings": [
+        "case.alpha_deg"
+      ],
+      "why": "This is why the studio walks the angle of attack in small steps from near zero instead of jumping straight to the target angle."
+    },
+    {
+      "key": "re-mach-type-1",
+      "heading": "Analysis",
+      "text": "Type 1 corresponds to a given wing at a fixed velocity going over an angle of attack range, as in a wind tunnel test alpha sweep or a sudden aircraft pullup. This is also the common form for an airfoil polar.",
+      "settings": [
+        "case.alpha_deg",
+        "validate.mach"
+      ],
+      "why": "With Type 1, the start-up default, the Reynolds and Mach numbers entered stay fixed while the angle of attack changes, as in the RANS case."
+    },
+    {
+      "key": "convergence-iter",
+      "heading": "Caveats",
+      "text": "The viscous analysis will execute no more Newton iterations than set by the current iteration limit each time an ALFA, CL, etc. command is issued. If convergence is not achieved within this limit, ALFA or CL can be issued as often as needed (most easily with \"!\"), with another set of Newton iterations being performed each time. This iteration limit can be changed from its default value of 10 with the ITER command in OPER.",
+      "settings": [
+        "case.alpha_deg"
+      ],
+      "why": "A point is converged only if it gets there within the iteration limit; the default is 10 and the studio raises it with ITER."
+    },
+    {
+      "key": "convergence-init",
+      "heading": "Caveats",
+      "text": "If the user insists on a large change from one point to another, it is best to force a re-initialization of the boundary layers with the INIT command from the VPAR menu in OPER before the radical calculation is performed. INIT should always be executed whenever the viscous solution blows up but the program doesn't crash.",
+      "settings": [
+        "case.alpha_deg"
+      ],
+      "why": "After a failed point the boundary layers have to be re-initialised before the next angle is tried."
+    },
+    {
+      "key": "panels-load-direct",
+      "heading": "Program Execution",
+      "text": "When the buffer airfoil coordinates are read from a file during startup, or read in via the LOAD command, they are by default also copied directly into the ``current'', or working airfoil. Hence, no special action is needed to start analysis operations.",
+      "settings": [
+        "geometry.naca"
+      ],
+      "why": "Coordinates read with LOAD are used as the panel nodes as they are; this is how the studio gives XFoil the same profile the mesh is built on."
+    },
+    {
+      "key": "panels-pane",
+      "heading": "Program Execution",
+      "text": "However, if the input airfoil has a poor point distribution (too many, too few, poorly spaced, etc), one can use PANE to create a better panel node distribution for the current airfoil on the splined buffer airfoil shape. The paneling routine increases the point density in areas of high curvature (i.e. the leading edge) and at the trailing edge to a degree specified by the user.",
+      "settings": [
+        "geometry.naca"
+      ],
+      "why": "PANE is XFoil's own repanelling, an optional step; the studio skips it for four-digit sections and supplies its own cosine-spaced nodes."
+    }
+  ],
+  "context": [
+    {
+      "key": "reynolds-unit-chord",
+      "heading": "Units",
+      "text": "Likewise, the XFOIL Reynolds number RE is defined with the freestream velocity and viscosity, and an implied unit chord:",
+      "why": "The Reynolds number given to XFoil is the chord Reynolds number of the RANS case only when the profile has chord 1."
+    },
+    {
+      "key": "panel-density",
+      "heading": "Analysis",
+      "text": "Moderate chord Reynolds numbers (1-3 million, say) usually require the finest paneling, since the bubbles are still important, but very small.",
+      "why": "XFoil needs its finest paneling at chord Reynolds numbers of 1 to 3 million, the range of the studio's reference case (2 million); the studio runs 320 panels."
+    },
+    {
+      "key": "force-coefficients-reference",
+      "heading": "Analysis",
+      "text": "CL, CD, CM are the usual chord-based definitions only if the airfoil has a unit chord -- in general, they will scale with the airfoil's chord. Also, CM is defined about the cartesian point (xref,yref) = (0.25,0.0), which is not necessarily the airfoil's 1/4 chord point.",
+      "why": "XFoil's coefficients match the RANS force coefficients only for a unit-chord profile with its leading edge at the origin, and its moment is taken about the quarter-chord point."
+    },
+    {
+      "key": "drag-squire-young",
+      "heading": "Analysis",
+      "text": "The drag coefficient CD is obtained by applying the Squire-Young formula at the last point in the wake --- NOT at the trailing edge.",
+      "why": "XFoil's drag comes from the wake momentum thickness, not from surface forces as in OpenFOAM, so the two drag values are independent estimates."
+    },
+    {
+      "key": "polar-pacc",
+      "heading": "Analysis",
+      "text": "The simplest way to create a polar is to issue the PACC command which sets the auto polar accumulation toggle and asks for the optional save and dump filenames. If either filename is given, each computed operating point will be stored internally and also written to the specified file.",
+      "why": "Cl, Cd and Cm are read from the polar save file that PACC writes, one line per computed angle."
+    },
+    {
+      "key": "cpwr-output",
+      "heading": "Analysis",
+      "text": "Output x vs Cp to file",
+      "why": "CPWR writes the surface pressure distribution that the studio reads back as Cp(x); this menu entry is all the primer says about it."
+    }
+  ]
+}

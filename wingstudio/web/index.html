@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wing Studio</title>
+<link rel="icon" href="data:,">
+<link rel="preload" href="fonts/ibm-plex-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="app" class="app">
+  <header id="topbar" class="topbar"></header>
+  <nav id="rail" class="rail" aria-label="Study steps and case stages"></nav>
+  <main id="centre" class="centre">
+    <div id="doctabs" class="doctabs"></div>
+    <section id="pane-main" class="pane" aria-label="Study"></section>
+    <section id="pane-compare" class="pane" aria-label="Compare cases" hidden></section>
+    <section id="pane-dashboard" class="pane" aria-label="Dashboard" hidden></section>
+    <!-- toasts float over the document area, clear of the action bar at its foot (see .toasts) -->
+    <div id="toasts" class="toasts" aria-live="polite"></div>
+  </main>
+  <aside id="chat" class="chat" aria-label="Chat and activity"></aside>
+  <footer id="statusbar" class="statusbar"></footer>
+</div>
+
+<button id="quote-btn" class="quote-btn" type="button" hidden>Quote in chat</button>
+<div id="lightbox" class="lightbox" hidden role="dialog" aria-label="Snapshot"></div>
+<noscript>Wing Studio needs JavaScript.</noscript>
+
+<script src="js/util.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/md.js"></script>
+<script src="js/api.js"></script>
+<script src="js/store.js"></script>
+<script src="js/metrics.js"></script>
+<script src="js/mock.js"></script>
+<script src="js/cite.js"></script>
+<script src="js/views_setup.js"></script>
+<script src="js/views_workspace.js"></script>
+<script src="js/chat.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="app.js"></script>
+<script src="js/tutorial.js"></script>
+</body>
+</html>

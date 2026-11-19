@@ -1,0 +1,78 @@
+{
+  "id": "openfoam-wall-functions",
+  "title": "OpenFOAM documentation: Wall functions",
+  "source_url": "https://doc.openfoam.com/2606/tools/processing/models/turbulence/ras/wall-functions/",
+  "retrieved": "2026-11-18",
+  "licence": "\"Copyright © OpenCFD Ltd. Documentation licence: CC BY-NC-ND 4.0.\" (footer of the page)",
+  "scope": "excerpts",
+  "raw_file": "page.html",
+  "passages": [
+    {
+      "key": "first-cell-in-log-layer",
+      "heading": "Overview",
+      "text": "Instead of placing many mesh layers in the region where molecular viscosity dominates, the first cell centre is located in the logarithmic layer and empirical law-of-the-wall relations supply the missing near-wall physics.",
+      "settings": [
+        "physics.wall_treatment",
+        "mesh.first_cell_height"
+      ],
+      "why": "This is the trade the default wall treatment makes: a coarser first cell placed in the logarithmic layer, with the law of the wall standing in for the layers left out."
+    },
+    {
+      "key": "log-layer-assumption",
+      "heading": "Near-wall flow",
+      "text": "Wall functions avoid that cost by assuming the cell centre adjacent to the wall lies in the log layer and that the profile between the wall and that point follows the law of the wall.",
+      "settings": [
+        "physics.wall_treatment",
+        "mesh.first_cell_height"
+      ],
+      "why": "A wall function is only valid if the first cell centre sits in the logarithmic layer, so the first cell height has to be chosen for it."
+    },
+    {
+      "key": "wall-function-yplus-range",
+      "heading": "High and low Reynolds number operation",
+      "text": "30 \\lesssim y^+ \\lesssim 300",
+      "settings": [
+        "physics.wall_treatment",
+        "mesh.first_cell_height"
+      ],
+      "why": "The page intends wall-function mode for a first cell centre at y+ of about 30 to 300; the studio accepts an average of 20 to 200, lower at both ends, and aims at 40."
+    },
+    {
+      "key": "buffer-layer",
+      "heading": "Momentum transfer",
+      "text": "When the first cell centre falls in the buffer layer, neither the pure viscous nor the pure log-layer estimate is accurate.",
+      "settings": [
+        "mesh.first_cell_height"
+      ],
+      "why": "A first cell between y+ 5 and 30 is in the buffer layer, where a plain log-law wall function is least accurate; the low end of the studio's band is there."
+    },
+    {
+      "key": "scalar-wall-conditions",
+      "heading": "Scalar wall functions",
+      "text": "Turbulence model scalars require consistent wall treatment alongside nut:",
+      "settings": [
+        "physics.wall_treatment"
+      ],
+      "why": "With k-omega SST the wall treatment also covers k and omega: the table under this line lists kqRWallFunction and omegaWallFunction, the two types the studio writes with wall functions."
+    },
+    {
+      "key": "low-re-resolved",
+      "heading": "High and low Reynolds number operation",
+      "text": "Low Reynolds number operation resolves the sub-layer",
+      "settings": [
+        "physics.wall_treatment"
+      ],
+      "why": "The resolved wall treatment needs a mesh that reaches into the viscous sub-layer; the page gives y+ of about 1 or less and typically 10 to 20 wall-normal layers, while the studio's gate accepts an average up to 5."
+    },
+    {
+      "key": "yplus-check",
+      "heading": "High and low Reynolds number operation",
+      "text": "distribution is a common source of inaccurate drag or heat-transfer predictions and should be checked with a post-processing function object such as yPlus",
+      "settings": [
+        "physics.wall_treatment",
+        "mesh.first_cell_height"
+      ],
+      "why": "A wall treatment that does not match the y+ actually obtained degrades drag, so y+ is checked after the run."
+    }
+  ]
+}

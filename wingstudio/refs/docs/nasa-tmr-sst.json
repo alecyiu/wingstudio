@@ -1,0 +1,59 @@
+{
+  "id": "nasa-tmr-sst",
+  "title": "The Menter Shear Stress Transport Turbulence Model (Turbulence Modeling Resource)",
+  "source_url": "https://tmbwg.github.io/turbmodels/sst.html",
+  "retrieved": "2026-11-18",
+  "licence": "not stated on the page",
+  "scope": "excerpts",
+  "raw_file": "sst.html",
+  "passages": [
+    {
+      "key": "freestream-eddy-viscosity-range",
+      "heading": "\"Standard\" Menter SST Two-Equation Model (SST) and (SSTm)",
+      "text": "and the combination of the two farfield values should yield a freestream turbulent viscosity between 10^-5 and 10^-2 times freestream laminar viscosity.",
+      "settings": [
+        "physics.nut_ratio"
+      ],
+      "why": "The far-field k and omega together should give an eddy viscosity of 1e-5 to 1e-2 times the laminar one; the studio's SST ratio of 1 is far above that range and is not taken from this page."
+    },
+    {
+      "key": "farfield-k-and-omega",
+      "heading": "\"Standard\" Menter SST Two-Equation Model (SST) and (SSTm)",
+      "text": "The boundary conditions recommended in the original reference are:\n\n$$\\frac{U_{\\infty}{L} < \\omega_{\\rm farfield} < 10 \\frac{U_{\\infty}{L}$$\n\n$$\\frac{10^{-5}U_{\\infty}^2}{Re_L} < k_{\\rm farfield} < \\frac{0.1 U_{\\infty}^2}{Re_L}$$",
+      "settings": [
+        "physics.turbulence_intensity",
+        "physics.nut_ratio"
+      ],
+      "why": "The recommended far-field ranges of the SST model: omega between U/L and 10 U/L, and k between 1e-5 and 0.1 times U^2 / Re_L, with L the length of the domain."
+    },
+    {
+      "key": "farfield-values-decay",
+      "heading": "\"Standard\" Menter SST Two-Equation Model (SST) and (SSTm)",
+      "text": "Thus, the farfield turbulence boundary conditions are somewhat open to interpretation. Note that the turbulence variables decay (sometimes dramatically) from their set values in the farfield for external aerodynamic problems.",
+      "settings": [
+        "physics.turbulence_intensity",
+        "physics.nut_ratio"
+      ],
+      "why": "What is set at the far field is not what reaches the airfoil: k and omega decay on the way in, so the far-field numbers are a loose choice."
+    },
+    {
+      "key": "controlled-decay-intensity",
+      "heading": "Menter SST Two-Equation Model with Controlled Decay (SST-sust) and (SST-sust-m)",
+      "text": "corresponds to a freestream Tu level of 0.08165%.",
+      "settings": [
+        "physics.turbulence_intensity"
+      ],
+      "why": "For the controlled-decay variant, which the studio does not use, the recommended far-field k is a turbulence intensity of about 0.08%, the same order as the studio's 0.1%."
+    },
+    {
+      "key": "typical-values-allow-decay",
+      "heading": "Menter SST Two-Equation Model with Controlled Decay (SST-sust) and (SST-sust-m)",
+      "text": "The reason is that these values have been adjusted to allow a drastic decay before the fluid approaches the body.",
+      "settings": [
+        "physics.turbulence_intensity",
+        "physics.nut_ratio"
+      ],
+      "why": "The usual far-field k and omega of the standard model are chosen with the decay before the body in mind."
+    }
+  ]
+}

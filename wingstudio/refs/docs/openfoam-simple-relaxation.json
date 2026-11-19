@@ -1,0 +1,52 @@
+{
+ "id": "openfoam-simple-relaxation",
+ "title": "OpenFOAM documentation: Under relaxation",
+ "source_url": "https://doc.openfoam.com/2606/tools/processing/numerics/solvers/under-relaxation/",
+ "retrieved": "2026-11-18",
+ "licence": "\"Copyright © OpenCFD Ltd. Documentation licence: CC BY-NC-ND 4.0.\" (footer of the page)",
+ "scope": "excerpts",
+ "raw_file": "page.html",
+ "passages": [
+  {
+   "key": "purpose",
+   "heading": "Under relaxation",
+   "text": "Under relaxation factors are applied to stabilise calculations by limiting the rate of change of both fields and equations.",
+   "settings": [
+    "numerics.relax_p",
+    "numerics.relax_U",
+    "numerics.relax_turbulence"
+   ],
+   "why": "Relaxation factors trade speed for stability; a factor applies either to a field (pressure) or to an equation (momentum, turbulence)."
+  },
+  {
+   "key": "field-formula",
+   "heading": "Field under-relaxation",
+   "text": "Q^n = Q^o + \\alpha \\left( Q - Q^o \\right)",
+   "settings": [
+    "numerics.relax_p"
+   ],
+   "why": "A field factor alpha moves the field only that fraction of the way from the old value to the newly solved one, which is what 0.3 does to pressure."
+  },
+  {
+   "key": "equation-diagonal-dominance",
+   "heading": "Equation under-relaxation",
+   "text": "The linear solvers require that the coefficient matrix is at least diagonally equal, and preferably diagonally dominant, i.e. per row, the magnitude of the diagonal must be greater than or equal to the sum of the off-diagonal components.",
+   "settings": [
+    "numerics.relax_U",
+    "numerics.relax_turbulence"
+   ],
+   "why": "Equation relaxation acts on the matrix diagonal, the property the linear solvers need; this is the setting behind 0.7 for momentum and turbulence."
+  },
+  {
+   "key": "where-set",
+   "heading": "Usage",
+   "text": "Specified in the fvSolution file under the relaxationFactors sub-dictionary",
+   "settings": [
+    "numerics.relax_p",
+    "numerics.relax_U",
+    "numerics.relax_turbulence"
+   ],
+   "why": "The factors live in fvSolution under relaxationFactors, with separate fields and equations blocks; the page gives no recommended values."
+  }
+ ]
+}
